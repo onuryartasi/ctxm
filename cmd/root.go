@@ -42,14 +42,16 @@ to quickly create a Cobra application.`,
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
 	Run: func(cmd *cobra.Command, args []string) {
-		contextNames := util.GetContexts()
-		selectedContext := ""
+		var selectedContext string
+		config := util.GetConfig()
+		contextNames := config.GetContextNames()
 		contextQuestion := &survey.Select{
 			Message: "Choose a context:",
 			Options: contextNames,
 		}
 		survey.AskOne(contextQuestion, &selectedContext, nil)
-		fmt.Println(selectedContext)
+		config.SetContext(selectedContext)
+		util.SetConfig(config)
 	},
 }
 

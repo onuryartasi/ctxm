@@ -1,10 +1,12 @@
 package types
 
+import "time"
+
 type KubeConfig struct {
 	APIVersion string `yaml:"apiVersion"`
 	Clusters   []struct {
 		Cluster struct {
-			CertificateAuthorityData string `yaml:"certificate-authority-data"`
+			CertificateAuthorityData string `yaml:"certificate-authority-data,omitempty"`
 			Server                   string `yaml:"server"`
 		} `yaml:"cluster"`
 		Name string `yaml:"name"`
@@ -23,16 +25,33 @@ type KubeConfig struct {
 	Users []struct {
 		Name string `yaml:"name"`
 		User struct {
-			ClientCertificateData string `yaml:"client-certificate-data"`
-			ClientKeyData         string `yaml:"client-key-data"`
+			ClientCertificateData string `yaml:"client-certificate-data,omitempty"`
+			ClientKeyData         string `yaml:"client-key-data,omitempty"`
+			ClientCertificate     string `yaml:"client-certificate,omitempty"`
+			ClientKey             string `yaml:"client-key,omitempty"`
 			AuthProvider          struct {
 				Config struct {
-					AccessToken string `yaml:"access-token"`
-					Expiry      struct {
-					} `yaml:"expiry"`
+					AccessToken string    `yaml:"access-token,omitempty"`
+					CmdArgs     string    `yaml:"cmd-args,omitempty"`
+					CmdPath     string    `yaml:"cmd-path,omitempty"`
+					Expiry      time.Time `yaml:"expiry,omitempty"`
+					ExpiryKey   string    `yaml:"expiry-key,omitempty"`
+					TokenKey    string    `yaml:"token-key,omitempty"`
 				} `yaml:"config"`
 				Name string `yaml:"name"`
-			} `yaml:"auth-provider"`
+			} `yaml:"auth-provider,omitempty"`
 		} `yaml:"user"`
 	} `yaml:"users"`
+}
+
+func (config *KubeConfig) GetContextNames() []string {
+	contextNames := []string{}
+	for _, context := range config.Contexts {
+		contextNames = append(contextNames, context.Name)
+	}
+	return contextNames
+}
+
+func (config *KubeConfig) SetContext(contextName string) {
+	config.CurrentContext = contextName
 }
