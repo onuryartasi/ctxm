@@ -3,12 +3,13 @@ package util
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
+	_ "k8s.io/client-go/plugin/pkg/client/auth"
 	"k8s.io/client-go/tools/clientcmd"
 )
 
 var clientset *kubernetes.Clientset
 
-func GetNamespaces() []string {
+func init() {
 	config, err := clientcmd.BuildConfigFromFlags("", configFile)
 	if err != nil {
 		panic(err.Error())
@@ -18,6 +19,10 @@ func GetNamespaces() []string {
 	if err != nil {
 		panic(err.Error())
 	}
+}
+
+func GetNamespaces() []string {
+
 	ns, err := clientset.CoreV1().Namespaces().List(metav1.ListOptions{})
 	if err != nil {
 		panic(err.Error())
