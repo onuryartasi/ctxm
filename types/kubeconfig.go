@@ -1,6 +1,8 @@
 package types
 
-import "time"
+import (
+	"time"
+)
 
 type KubeConfig struct {
 	APIVersion string `yaml:"apiVersion"`
@@ -13,8 +15,9 @@ type KubeConfig struct {
 	} `yaml:"clusters"`
 	Contexts []struct {
 		Context struct {
-			Cluster string `yaml:"cluster"`
-			User    string `yaml:"user"`
+			Cluster   string `yaml:"cluster"`
+			User      string `yaml:"user"`
+			Namespace string `yaml:"namespace,omitempty"`
 		} `yaml:"context"`
 		Name string `yaml:"name"`
 	} `yaml:"contexts"`
@@ -54,4 +57,12 @@ func (config *KubeConfig) GetContextNames() []string {
 
 func (config *KubeConfig) SetContext(contextName string) {
 	config.CurrentContext = contextName
+}
+
+func (config *KubeConfig) SetNamespace(namespace string) {
+	for id, value := range config.Contexts {
+		if value.Name == config.CurrentContext {
+			config.Contexts[id].Context.Namespace = namespace
+		}
+	}
 }

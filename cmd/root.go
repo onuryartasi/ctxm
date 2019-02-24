@@ -30,7 +30,7 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "context-manager",
+	Use:   "cxm",
 	Short: "A brief description of your application",
 	Long: `A longer description that spans multiple lines and likely contains
 examples and usage of using your application. For example:
@@ -42,6 +42,7 @@ to quickly create a Cobra application.`,
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
 	Run: func(cmd *cobra.Command, args []string) {
+
 		var selectedContext string
 		config := util.GetConfig()
 		contextNames := config.GetContextNames()
@@ -51,6 +52,7 @@ to quickly create a Cobra application.`,
 		}
 		survey.AskOne(contextQuestion, &selectedContext, nil)
 		config.SetContext(selectedContext)
+		config.SetNamespace("kube-system")
 		util.SetConfig(config)
 	},
 }
