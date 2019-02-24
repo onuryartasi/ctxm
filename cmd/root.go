@@ -1,4 +1,4 @@
-// Copyright © 2019 NAME HERE <EMAIL ADDRESS>
+// Copyright © 2019 Onur YARTAŞI <onuryartasi@live.com>
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,6 +17,9 @@ package cmd
 import (
 	"fmt"
 	"os"
+
+	"github.com/onuryartasi/context-manager/util"
+	"gopkg.in/AlecAivazis/survey.v1"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
@@ -38,6 +41,16 @@ to quickly create a Cobra application.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
+	Run: func(cmd *cobra.Command, args []string) {
+		contextNames := util.GetContexts()
+		selectedContext := ""
+		contextQuestion := &survey.Select{
+			Message: "Choose a context:",
+			Options: contextNames,
+		}
+		survey.AskOne(contextQuestion, &selectedContext, nil)
+		fmt.Println(selectedContext)
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
