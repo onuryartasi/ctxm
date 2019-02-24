@@ -60,8 +60,8 @@ func (config *KubeConfig) SetContext(contextName string) {
 }
 
 func (config *KubeConfig) SetNamespace(namespace string) {
-	for id, value := range config.Contexts {
-		if value.Name == config.CurrentContext {
+	for id, context := range config.Contexts {
+		if context.Name == config.CurrentContext {
 			config.Contexts[id].Context.Namespace = namespace
 		}
 	}
