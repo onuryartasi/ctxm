@@ -27,6 +27,7 @@ import (
 )
 
 var cfgFile string
+var contextFlag string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -42,17 +43,26 @@ to quickly create a Cobra application.`,
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
 	Run: func(cmd *cobra.Command, args []string) {
-
 		var selectedContext string
 		config := util.GetConfig()
 		contextNames := config.GetContextNames()
-		contextQuestion := &survey.Select{
-			Message: "Choose a context:",
-			Options: contextNames,
+		if len(contextFlag) > 0 {
+			for _, value := range contextNames {
+				if value == contextFlag {
+					config.SetContext(contextFlag)
+					util.SetConfig(config)
+					return
+				}
+			}
+			fmt.Printf("No context with %s\n", contextFlag)
+		} else {
+			contextQuestion := &survey.Select{
+				Message: "Choose a context:",
+				Options: contextNames,
+			}
+			survey.AskOne(contextQuestion, &selectedContext, nil)
+			config.SetContext(selectedContext)
 		}
-		survey.AskOne(contextQuestion, &selectedContext, nil)
-		config.SetContext(selectedContext)
-		config.SetNamespace("kube-system")
 		util.SetConfig(config)
 	},
 }
@@ -67,6 +77,7 @@ func Execute() {
 }
 
 func init() {
+
 	cobra.OnInitialize(initConfig)
 
 	// Here you will define your flags and configuration settings.
@@ -76,6 +87,7 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
+	rootCmd.Flags().StringVarP(&contextFlag, "name", "n", "", "Change the context")
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 

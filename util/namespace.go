@@ -9,7 +9,7 @@ import (
 
 var clientset *kubernetes.Clientset
 
-func init() {
+func GetNamespaces() []string {
 	config, err := clientcmd.BuildConfigFromFlags("", configFile)
 	if err != nil {
 		panic(err.Error())
@@ -19,9 +19,6 @@ func init() {
 	if err != nil {
 		panic(err.Error())
 	}
-}
-
-func GetNamespaces() []string {
 
 	ns, err := clientset.CoreV1().Namespaces().List(metav1.ListOptions{})
 	if err != nil {
