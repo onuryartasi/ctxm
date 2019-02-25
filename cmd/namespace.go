@@ -16,9 +16,8 @@ package cmd
 
 import (
 	"github.com/onuryartasi/context-manager/util"
-	"gopkg.in/AlecAivazis/survey.v1"
-
 	"github.com/spf13/cobra"
+	"gopkg.in/AlecAivazis/survey.v1"
 )
 
 // namespaceCmd represents the namespace command
@@ -32,16 +31,7 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		var selectedNamespace string
-		config := util.GetConfig()
-		namespaces := util.GetNamespaces()
-		contextQuestion := &survey.Select{
-			Message: "Choose a namespace:",
-			Options: namespaces,
-		}
-		survey.AskOne(contextQuestion, &selectedNamespace, nil)
-		config.SetNamespace(selectedNamespace)
-		util.SetConfig(config)
+		Namespace(args...)
 	},
 	Aliases: []string{"ns", "namespaces"},
 }
@@ -58,4 +48,17 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// namespaceCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func Namespace(args ...string) {
+	var selectedNamespace string
+	config := util.GetConfig()
+	namespaces := util.GetNamespaces()
+	contextQuestion := &survey.Select{
+		Message: "Choose a namespace:",
+		Options: namespaces,
+	}
+	survey.AskOne(contextQuestion, &selectedNamespace, nil)
+	config.SetNamespace(selectedNamespace)
+	util.SetConfig(config)
 }

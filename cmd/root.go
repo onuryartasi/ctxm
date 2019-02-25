@@ -51,6 +51,7 @@ to quickly create a Cobra application.`,
 				if value == contextFlag {
 					config.SetContext(contextFlag)
 					util.SetConfig(config)
+					fmt.Printf("Context set %s\n", contextFlag)
 					return
 				}
 			}

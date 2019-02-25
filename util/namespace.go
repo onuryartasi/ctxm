@@ -10,6 +10,7 @@ import (
 var clientset *kubernetes.Clientset
 
 func GetNamespaces() []string {
+	configFile := GetConfigFile()
 	config, err := clientcmd.BuildConfigFromFlags("", configFile)
 	if err != nil {
 		panic(err.Error())

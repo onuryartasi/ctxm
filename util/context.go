@@ -10,18 +10,17 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-var configFile string
-
-func init() {
+func GetConfigFile() string {
 	home, err := homedir.Dir()
 	if err != nil {
 		log.Fatalf("Homedir error %s", err)
 	}
-	configFile = filepath.Join(home, ".kube", "config")
+	return filepath.Join(home, ".kube", "config")
 }
 
 func GetConfig() types.KubeConfig {
 	var config types.KubeConfig
+	configFile := GetConfigFile()
 	configData, err := ioutil.ReadFile(configFile)
 	if err != nil {
 		log.Fatalf("Can't read config %s, Error: %s", configFile, err)
@@ -32,6 +31,7 @@ func GetConfig() types.KubeConfig {
 }
 
 func SetConfig(config types.KubeConfig) {
+	configFile := GetConfigFile()
 	data, err := yaml.Marshal(config)
 	if err != nil {
 		log.Fatalf("Can't serialize config, %s", err)
