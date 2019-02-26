@@ -26,13 +26,10 @@ func GetNamespaces() []string {
 }
 
 func newClient() (kubernetes.Interface, error) {
-	configOverrides := &clientcmd.ConfigOverrides{}
-
 	loadingRules := clientcmd.NewDefaultClientConfigLoadingRules()
-	config, err := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(loadingRules, configOverrides).ClientConfig()
+	config, err := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(loadingRules, &clientcmd.ConfigOverrides{}).ClientConfig()
 	if err != nil {
 		return nil, err
 	}
-
 	return kubernetes.NewForConfig(config)
 }
