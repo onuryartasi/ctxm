@@ -10,17 +10,10 @@ import (
 var clientset *kubernetes.Clientset
 
 func GetNamespaces() []string {
-	configFile := GetConfigFile()
-	config, err := clientcmd.BuildConfigFromFlags("", configFile)
+	clientset, err := newClient()
 	if err != nil {
 		panic(err.Error())
 	}
-	// create the clientset
-	clientset, err = kubernetes.NewForConfig(config)
-	if err != nil {
-		panic(err.Error())
-	}
-
 	ns, err := clientset.CoreV1().Namespaces().List(metav1.ListOptions{})
 	if err != nil {
 		panic(err.Error())
@@ -30,4 +23,16 @@ func GetNamespaces() []string {
 		namespaces = append(namespaces, item.GetName())
 	}
 	return namespaces
+}
+
+func newClient() (kubernetes.Interface, error) {
+	configOverrides := &clientcmd.ConfigOverrides{}
+
+	loadingRules := clientcmd.NewDefaultClientConfigLoadingRules()
+	config, err := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(loadingRules, configOverrides).ClientConfig()
+	if err != nil {
+		return nil, err
+	}
+
+	return kubernetes.NewForConfig(config)
 }
