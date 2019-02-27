@@ -6,10 +6,10 @@ clusters:
 contexts:
 - context:
     cluster: cluster1
-    namespace: kube-system
+    namespace: default
     user: user1
   name: user1@cluster1
-current-context: gke_kaldera-ci-cd_europe-west3-c_iby-cluster
+current-context: user1@cluster1
 kind: Config
 preferences: {}
 users:

@@ -13,7 +13,7 @@ func TestChangeNamespace(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	os.Setenv("KUBECONFIG", fmt.Sprintf("%s/mocks/config1:%s/mocks/config2", wd, wd))
+	os.Setenv("KUBECONFIG", fmt.Sprintf("%s/test/mocks/config1:%s/test/mocks/config2", wd, wd))
 	config := util.GetRawConfig()
 	namespaces := []string{"default", "kube-public", "kube-system"}
 	input := namespaces[0]
