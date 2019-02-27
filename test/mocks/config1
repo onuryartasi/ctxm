@@ -1,0 +1,17 @@
+apiVersion: v1
+clusters:
+- cluster:
+    server: ""
+  name: cluster1
+contexts:
+- context:
+    cluster: cluster1
+    namespace: kube-system
+    user: user1
+  name: user1@cluster1
+current-context: gke_kaldera-ci-cd_europe-west3-c_iby-cluster
+kind: Config
+preferences: {}
+users:
+- name: user1
+  user: {}

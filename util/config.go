@@ -1,12 +1,9 @@
 package util
 
 import (
-	"io/ioutil"
 	"os"
 	"strings"
 
-	"github.com/ghodss/yaml"
-	"github.com/onuryartasi/context-manager/types"
 	"k8s.io/client-go/tools/clientcmd"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 )
@@ -28,19 +25,6 @@ func GetRawConfig() clientcmdapi.Config {
 		panic(err)
 	}
 
-	return config
-}
-
-func GetStructConfig(configPath string) types.KubeConfig {
-	var config types.KubeConfig
-	configData, err := ioutil.ReadFile(configPath)
-	if err != nil {
-		panic(err)
-	}
-	err = yaml.Unmarshal(configData, &config)
-	if err != nil {
-		panic(err)
-	}
 	return config
 }
 
