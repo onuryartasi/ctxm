@@ -58,11 +58,3 @@ func (config *KubeConfig) GetContextNames() []string {
 func (config *KubeConfig) SetContext(contextName string) {
 	config.CurrentContext = contextName
 }
-
-func (config *KubeConfig) SetNamespace(namespace string) {
-	for id, context := range config.Contexts {
-		if context.Name == config.CurrentContext {
-			config.Contexts[id].Context.Namespace = namespace
-		}
-	}
-}

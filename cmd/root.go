@@ -18,12 +18,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/onuryartasi/context-manager/util"
-	"gopkg.in/AlecAivazis/survey.v1"
-
 	homedir "github.com/mitchellh/go-homedir"
+	"github.com/onuryartasi/context-manager/util"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"gopkg.in/AlecAivazis/survey.v1"
 )
 
 var cfgFile string
@@ -43,29 +42,20 @@ to quickly create a Cobra application.`,
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
 	Run: func(cmd *cobra.Command, args []string) {
-		var selectedContext string
-		config := util.GetConfig()
-		contextNames := config.GetContextNames()
-		if len(contextFlag) > 0 {
-			for _, value := range contextNames {
-				if value == contextFlag {
-					config.SetContext(contextFlag)
-					util.SetConfig(config)
-					fmt.Printf("Context set %s\n", contextFlag)
-					return
-				}
-			}
-			fmt.Printf("No context with %s\n", contextFlag)
-		} else {
-			contextQuestion := &survey.Select{
-				Message: "Choose a context:",
-				Options: contextNames,
-			}
-			survey.AskOne(contextQuestion, &selectedContext, nil)
-			config.SetContext(selectedContext)
-		}
-		util.SetConfig(config)
+		ChangeContext(args...)
 	},
+}
+
+func ChangeContext(args ...string) {
+	var selectedContext string
+	config := util.GetRawConfig()
+	contexts := util.GetContexts(config)
+	contextQuestion := &survey.Select{
+		Message: "Choose a context:",
+		Options: contexts,
+	}
+	survey.AskOne(contextQuestion, &selectedContext, nil)
+	util.SetContext(selectedContext)
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
