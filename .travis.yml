@@ -36,5 +36,15 @@ notifications:
 script:     # run a bunch of code checkers/linters in parallel
   - make test  # try to make binary
   
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key: $GH_TOKEN
+  file_glob: true
+  file:
+    - "ctxm"
+  on:
+    tags: true
+    branch: master
 after_success:
   - bash <(curl -s https://codecov.io/bash)

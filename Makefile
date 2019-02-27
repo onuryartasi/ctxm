@@ -13,7 +13,7 @@ all: build test clean
 build: 
 		$(GOBUILD) -o $(BINARY_NAME) -v
 test: build
-		$(GOTEST) -v ./...
+		$(GOTEST)  ./...
 clean: 
 		$(GOCLEAN)
 		rm -f $(BINARY_NAME)
