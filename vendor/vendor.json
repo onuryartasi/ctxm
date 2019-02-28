@@ -117,7 +117,7 @@
 			"revisionTime": "2019-02-05T22:20:52Z"
 		},
 		{
-			"checksumSHA1": "MgOjBhN2mexD1bmX1jLMJmpJqss=",
+			"checksumSHA1": "R1im0duOX7cXUsuKmD4t9hSlV6o=",
 			"path": "github.com/google/btree",
 			"revision": "7d79101e329e5a3adf994758c578dab82b90c017",
 			"revisionTime": "2016-05-24T15:18:35Z"
@@ -464,7 +464,7 @@
 			"revisionTime": "2019-02-12T00:20:02Z"
 		},
 		{
-			"checksumSHA1": "GS83dscwl/xqUgWCj+6k97Ej7UE=",
+			"checksumSHA1": "k8nyiVwbKd7N/Lo9z85y6v/03NE=",
 			"path": "golang.org/x/sys/unix",
 			"revision": "b4e8571b14e03cc164df06f72b640ebce3899579",
 			"revisionTime": "2019-02-15T10:12:20Z"
@@ -488,13 +488,13 @@
 			"revisionTime": "2019-02-21T13:47:49Z"
 		},
 		{
-			"checksumSHA1": "kRHVIuePi38RXAJmksH3MfQzTJI=",
+			"checksumSHA1": "qjFbU4RWY+Caxaa5/TlMJW82E+A=",
 			"path": "golang.org/x/text/unicode/bidi",
 			"revision": "d14c52b222ee852cdba8b07206ca0c614b389876",
 			"revisionTime": "2019-02-21T13:47:49Z"
 		},
 		{
-			"checksumSHA1": "lBB8oUHgIK0RUuDchkQVfMXJQh0=",
+			"checksumSHA1": "vAScJLvb0ucuuclyN9vmJUyWTBA=",
 			"path": "golang.org/x/text/unicode/norm",
 			"revision": "d14c52b222ee852cdba8b07206ca0c614b389876",
 			"revisionTime": "2019-02-21T13:47:49Z"
