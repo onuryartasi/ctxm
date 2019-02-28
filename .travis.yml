@@ -46,5 +46,6 @@ deploy:
     - "ctxm"
   on:
     tags: true
+    branch: release
 after_success:
   - bash <(curl -s https://codecov.io/bash)
