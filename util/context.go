@@ -1,6 +1,10 @@
 package util
 
-func GetCurrentContext() string {
+func GetCurrentContext() (string, string) {
 	config := GetRawConfig()
-	return config.CurrentContext
+	ns := config.Contexts[config.CurrentContext].Namespace
+	if !(len(ns) > 0) {
+		ns = "default"
+	}
+	return config.CurrentContext, ns
 }

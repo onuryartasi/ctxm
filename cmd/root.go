@@ -38,8 +38,8 @@ var rootCmd = &cobra.Command{
 	//	Run: func(cmd *cobra.Command, args []string) { },
 	Run: func(cmd *cobra.Command, args []string) {
 		if current {
-			context := util.GetCurrentContext()
-			fmt.Println(context)
+			context, namespace := util.GetCurrentContext()
+			fmt.Printf("%s, %s\n", context, namespace)
 		} else {
 			ChangeContext(args...)
 		}
@@ -56,7 +56,10 @@ func ChangeContext(args ...string) {
 		Options: contexts,
 	}
 	survey.AskOne(contextQuestion, &selectedContext, nil)
-	util.SetContext(selectedContext)
+	if len(selectedContext) > 0 {
+		util.SetContext(selectedContext)
+	}
+
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
