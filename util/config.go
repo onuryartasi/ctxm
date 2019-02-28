@@ -33,19 +33,16 @@ func SetNamespace(config clientcmdapi.Config, namespace string) error {
 	kubeConfigEnv := os.Getenv("KUBECONFIG")
 	if len(kubeConfigEnv) > 0 {
 		configPaths := strings.Split(kubeConfigEnv, ":")
-		if len(configPaths) > 1 {
-			for _, configPath := range configPaths {
-				configBase, _ := clientcmd.LoadFromFile(configPath)
-				_, ok := configBase.Contexts[config.CurrentContext]
-				if ok {
-					configBase.Contexts[config.CurrentContext].Namespace = namespace
-					err := clientcmd.WriteToFile(*configBase, configPath)
-					return err
-				}
-
+		for _, configPath := range configPaths {
+			configBase, _ := clientcmd.LoadFromFile(configPath)
+			_, ok := configBase.Contexts[config.CurrentContext]
+			if ok {
+				configBase.Contexts[config.CurrentContext].Namespace = namespace
+				err := clientcmd.WriteToFile(*configBase, configPath)
+				return err
 			}
-		}
 
+		}
 	}
 
 	config.Contexts[config.CurrentContext].Namespace = namespace
