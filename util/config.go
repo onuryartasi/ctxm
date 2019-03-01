@@ -1,12 +1,21 @@
 package util
 
 import (
+	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 
+	homedir "github.com/mitchellh/go-homedir"
+	"gopkg.in/yaml.v2"
 	"k8s.io/client-go/tools/clientcmd"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 )
+
+type PrevContextConfig struct {
+	PrevContext   string `yaml:"PrevContext"`
+	PrevNamespace string `yaml:"PrevNamespace"`
+}
 
 func GetConfigFilePath() string {
 	kubeConfigEnv := os.Getenv("KUBECONFIG")
@@ -85,6 +94,67 @@ func SetContext(contex string) {
 	err = clientcmd.WriteToFile(*config, clientcmd.RecommendedHomeFile)
 	if err != nil {
 		panic(err)
+	}
+
+}
+
+func GetPrevContextConfig() PrevContextConfig {
+	var config PrevContextConfig
+	configPath, ok := IsExistsPrevContext()
+	if !ok {
+		config = PrevContextConfig{PrevContext: "", PrevNamespace: ""}
+		data, err := yaml.Marshal(&config)
+		if err != nil {
+			panic(err)
+		}
+
+		err = ioutil.WriteFile(configPath, data, 0644)
+		return config
+	}
+
+	reading, err := ioutil.ReadFile(configPath)
+	if err != nil {
+		panic(err)
+	}
+	yaml.Unmarshal(reading, &config)
+	return config
+}
+
+func IsExistsPrevContext() (string, bool) {
+	dir, err := homedir.Dir()
+	if err != nil {
+		panic(err)
+	}
+	configPath := filepath.Join(dir, ".context-manager", "config")
+	_, err = os.Stat(configPath)
+	if os.IsNotExist(err) {
+		return configPath, false
+	}
+	return configPath, true
+}
+func (config *PrevContextConfig) SetContextPrevContextConfig(context string) {
+	config.PrevContext = context
+	config.PrevNamespace = ""
+
+}
+
+func (config *PrevContextConfig) SetNamespacePrevContextConfig(namespace string) {
+	config.PrevNamespace = namespace
+
+}
+
+func (config *PrevContextConfig) WriteFile() {
+	data, err := yaml.Marshal(&config)
+	if err != nil {
+		panic(err)
+	}
+	configPath, ok := IsExistsPrevContext()
+
+	if ok {
+		err := ioutil.WriteFile(configPath, data, 0644)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 }

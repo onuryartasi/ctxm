@@ -41,6 +41,7 @@ var rootCmd = &cobra.Command{
 			fmt.Printf("%s, %s\n", context, namespace)
 		} else {
 			ChangeContext(args...)
+
 		}
 
 	},
@@ -57,6 +58,13 @@ func ChangeContext(args ...string) {
 	survey.AskOne(contextQuestion, &selectedContext, nil)
 	if len(selectedContext) > 0 {
 		util.SetContext(selectedContext)
+
+		if selectedContext != config.CurrentContext {
+			prevConfig := util.GetPrevContextConfig()
+			prevConfig.SetContextPrevContextConfig(config.CurrentContext)
+			prevConfig.WriteFile()
+		}
+
 	}
 
 }
