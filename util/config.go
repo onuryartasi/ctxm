@@ -42,12 +42,14 @@ func GetRawConfig() clientcmdapi.Config {
 
 // SetNamespace is changed current namespace for current context, if have a multiple kubeconfig, searching context name in KUBECONFIG env later writing  to founded ConfigPath
 func SetNamespace(config clientcmdapi.Config, namespace string) {
-
 	configFilePath := GetConfigFilePath()
 
 	configPaths := strings.Split(configFilePath, ":")
 	for _, configPath := range configPaths {
-		configBase, _ := clientcmd.LoadFromFile(configPath)
+		configBase, err := clientcmd.LoadFromFile(configPath)
+		if err != nil {
+			panic(err)
+		}
 		_, ok := configBase.Contexts[config.CurrentContext]
 		if ok {
 			configBase.Contexts[config.CurrentContext].Namespace = namespace

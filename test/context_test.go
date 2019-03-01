@@ -13,10 +13,12 @@ func TestGetContextNames(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	os.Setenv("KUBECONFIG", fmt.Sprintf("%s//test/mocks/config1:%s/test/mocks/config2", wd, wd))
+	os.Setenv("KUBECONFIG", fmt.Sprintf("%s/mocks/config1:%s/mocks/config2", wd, wd))
 	config := util.GetRawConfig()
 	contexts := util.GetContexts(config)
-	fmt.Println(contexts)
+	if !(len(contexts) > 0) {
+		t.Errorf("Getting any contexts, %v", contexts)
+	}
 }
 
 func TestChangeContext(t *testing.T) {
@@ -24,7 +26,7 @@ func TestChangeContext(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	os.Setenv("KUBECONFIG", fmt.Sprintf("%s/test/mocks/config1:%s/test/mocks/config2", wd, wd))
+	os.Setenv("KUBECONFIG", fmt.Sprintf("%s/mocks/config1:%s/mocks/config2", wd, wd))
 	config := util.GetRawConfig()
 	contexts := util.GetContexts(config)
 
@@ -43,7 +45,7 @@ func TestPrintCurrentContext(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	os.Setenv("KUBECONFIG", fmt.Sprintf("%s/test/mocks/config1:%s/test/mocks/config2", wd, wd))
+	os.Setenv("KUBECONFIG", fmt.Sprintf("%s/mocks/config1:%s/mocks/config2", wd, wd))
 	config := util.GetRawConfig()
 	contexts := util.GetContexts(config)
 	for _, context := range contexts {

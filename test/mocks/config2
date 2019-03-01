@@ -3,17 +3,18 @@ clusters:
 - cluster:
     server: ""
   name: cluster2
-  - cluster:
+- cluster:
     server: ""
   name: cluster3
 contexts:
 - context:
     cluster: cluster2
-    namespace: default
+    namespace: kube-system
     user: user2
   name: user2@cluster2
 - context:
     cluster: cluster3
+    namespace: kube-system
     user: user3
   name: user3@cluster3
 current-context: ""
