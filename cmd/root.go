@@ -47,6 +47,7 @@ var rootCmd = &cobra.Command{
 	},
 }
 
+// currentCmd represent current context
 var currentCmd = &cobra.Command{
 	Use:   "current",
 	Short: "Get Current context and namespace",
@@ -77,6 +78,7 @@ var previousContextCmd = &cobra.Command{
 	Aliases: []string{"prev", ".."},
 }
 
+// ChangeContext is changer current-context
 func ChangeContext(args ...string) {
 	var selectedContext string
 	config := util.GetRawConfig()

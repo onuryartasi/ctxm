@@ -9,6 +9,7 @@ import (
 
 var clientset *kubernetes.Clientset
 
+// GetNamespaces is accessing current context and returning all namespace name
 func GetNamespaces() []string {
 	clientset, err := newClient()
 	if err != nil {
@@ -25,6 +26,7 @@ func GetNamespaces() []string {
 	return namespaces
 }
 
+// newClient return kubectl client for accessing kubernetes with out-of-box
 func newClient() (kubernetes.Interface, error) {
 	loadingRules := clientcmd.NewDefaultClientConfigLoadingRules()
 	config, err := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(loadingRules, &clientcmd.ConfigOverrides{}).ClientConfig()

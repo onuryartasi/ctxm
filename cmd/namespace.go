@@ -34,6 +34,7 @@ var namespaceCmd = &cobra.Command{
 	Aliases: []string{"ns", "namespaces"},
 }
 
+// prevNamespaceCmd change to previous namespace
 var prevNamespaceCmd = &cobra.Command{
 	Use:   "previous",
 	Short: "Change current-context's previous namespace",
@@ -53,6 +54,7 @@ var prevNamespaceCmd = &cobra.Command{
 	Aliases: []string{".."},
 }
 
+// currentNamespaceCmd represent current namespace
 var currentNamespaceCmd = &cobra.Command{
 	Use:   "current",
 	Short: "Print current-context's namespace",
