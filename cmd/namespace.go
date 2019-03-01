@@ -1,4 +1,4 @@
-// Copyright © 2019 NAME HERE <EMAIL ADDRESS>
+// Copyright © 2019 Onur Yartaşı onuryartasi@live.com
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/onuryartasi/context-manager/util"
 	"github.com/spf13/cobra"
 	"gopkg.in/AlecAivazis/survey.v1"
@@ -32,11 +34,29 @@ var namespaceCmd = &cobra.Command{
 	Aliases: []string{"ns", "namespaces"},
 }
 
+var prevNamespaceCmd = &cobra.Command{
+	Use:   "previous",
+	Short: "Change current-context's previous namespace",
+	Run: func(cmd *cobra.Command, args []string) {
+		prevConfig := util.GetPrevConfig()
+		config := util.GetRawConfig()
+		if prevConfig.PrevNamespace != "" {
+			util.SetNamespace(config, prevConfig.PrevNamespace)
+		} else {
+			fmt.Printf("Not Found previous namespace\n")
+		}
+
+	},
+	Aliases: []string{".."},
+}
+
 func init() {
 	rootCmd.AddCommand(namespaceCmd)
+	namespaceCmd.AddCommand(prevNamespaceCmd)
 
 }
 
+// ChangeNamespace is current-context's namespace changer
 func ChangeNamespace(args ...string) {
 	var selectedNamespace string
 	config := util.GetRawConfig()
