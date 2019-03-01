@@ -42,10 +42,12 @@ var prevNamespaceCmd = &cobra.Command{
 		config := util.GetRawConfig()
 		if prevConfig.PrevNamespace != "" {
 			util.SetNamespace(config, prevConfig.PrevNamespace)
+			prevConfig.SetNamespacePrevConfig(config.Contexts[config.CurrentContext].Namespace)
+			prevConfig.WriteFile()
+			fmt.Printf("%s\n", prevConfig.PrevNamespace)
 		} else {
-			fmt.Printf("Not Found previous namespace\n")
+			fmt.Printf("Not found previous namespace\n")
 		}
-
 	},
 	Aliases: []string{".."},
 }
