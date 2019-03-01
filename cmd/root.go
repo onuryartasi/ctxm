@@ -60,8 +60,8 @@ func ChangeContext(args ...string) {
 		util.SetContext(selectedContext)
 
 		if selectedContext != config.CurrentContext {
-			prevConfig := util.GetPrevContextConfig()
-			prevConfig.SetContextPrevContextConfig(config.CurrentContext)
+			prevConfig := util.GetPrevConfig()
+			prevConfig.SetContextPrevConfig(config.CurrentContext)
 			prevConfig.WriteFile()
 		}
 

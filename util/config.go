@@ -20,7 +20,7 @@ type PrevConfig struct {
 
 // GetConfigFilePath if set KUBECONFING than return this or return RecomendedHomeFile (ex. /home/$USER/.kube/config)
 func GetConfigFilePath() string {
-	kubeConfigEnv := os.Getenv("KUBECONFIG")
+	kubeConfigEnv := os.Getenv(clientcmd.RecommendedConfigPathEnvVar)
 
 	if len(kubeConfigEnv) > 0 {
 		return kubeConfigEnv
@@ -41,26 +41,24 @@ func GetRawConfig() clientcmdapi.Config {
 }
 
 // SetNamespace is changed current namespace for current context, if have a multiple kubeconfig, searching context name in KUBECONFIG env later writing  to founded ConfigPath
-func SetNamespace(config clientcmdapi.Config, namespace string) error {
+func SetNamespace(config clientcmdapi.Config, namespace string) {
 
-	kubeConfigEnv := os.Getenv("KUBECONFIG")
-	if len(kubeConfigEnv) > 0 {
-		configPaths := strings.Split(kubeConfigEnv, ":")
-		for _, configPath := range configPaths {
-			configBase, _ := clientcmd.LoadFromFile(configPath)
-			_, ok := configBase.Contexts[config.CurrentContext]
-			if ok {
-				configBase.Contexts[config.CurrentContext].Namespace = namespace
-				err := clientcmd.WriteToFile(*configBase, configPath)
-				return err
+	configFilePath := GetConfigFilePath()
+
+	configPaths := strings.Split(configFilePath, ":")
+	for _, configPath := range configPaths {
+		configBase, _ := clientcmd.LoadFromFile(configPath)
+		_, ok := configBase.Contexts[config.CurrentContext]
+		if ok {
+			configBase.Contexts[config.CurrentContext].Namespace = namespace
+			err := clientcmd.WriteToFile(*configBase, configPath)
+			if err != nil {
+				panic(err)
 			}
-
 		}
+
 	}
 
-	config.Contexts[config.CurrentContext].Namespace = namespace
-	err := clientcmd.WriteToFile(config, clientcmd.RecommendedHomeFile)
-	return err
 }
 
 // GetContexts return context names in kubeconfig struct

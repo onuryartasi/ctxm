@@ -47,7 +47,14 @@ func ChangeNamespace(args ...string) {
 	}
 	survey.AskOne(contextQuestion, &selectedNamespace, nil)
 	if len(selectedNamespace) > 0 {
+
 		util.SetNamespace(config, selectedNamespace)
+		if config.Contexts[config.CurrentContext].Namespace != selectedNamespace {
+			prevConfig := util.GetPrevConfig()
+			prevConfig.SetNamespacePrevConfig(config.Contexts[config.CurrentContext].Namespace)
+			prevConfig.WriteFile()
+		}
+
 	}
 
 }
