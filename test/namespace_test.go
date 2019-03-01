@@ -16,16 +16,16 @@ func TestChangeNamespace(t *testing.T) {
 	os.Setenv("KUBECONFIG", fmt.Sprintf("%s/test/mocks/config1:%s/test/mocks/config2", wd, wd))
 	config := util.GetRawConfig()
 	namespaces := []string{"default", "kube-public", "kube-system"}
-	input := namespaces[0]
-
-	err = util.SetNamespace(config, input)
-	if err != nil {
-		panic(err)
-	}
-	config2 := util.GetRawConfig()
-
-	if input != config2.Contexts[config2.CurrentContext].Namespace {
-		t.Errorf("Doesn't matches %s, %s", input, config2.Contexts[config2.CurrentContext].Namespace)
+	contexts := util.GetContexts(config)
+	for _, context := range contexts {
+		util.SetContext(context)
+		for _, namespace := range namespaces {
+			util.SetNamespace(config, namespace)
+			config2 := util.GetRawConfig()
+			if namespace != config2.Contexts[context].Namespace {
+				t.Errorf("Expected: %s\nActual: %s\n,input:%s", namespace, config2.Contexts[context].Namespace, namespace)
+			}
+		}
 	}
 
 }
