@@ -12,11 +12,13 @@ import (
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 )
 
-type PrevContextConfig struct {
+//PrevConfig Previous Context and Namespace storage type
+type PrevConfig struct {
 	PrevContext   string `yaml:"PrevContext"`
 	PrevNamespace string `yaml:"PrevNamespace"`
 }
 
+// GetConfigFilePath if set KUBECONFING than return this or return RecomendedHomeFile (ex. /home/$USER/.kube/config)
 func GetConfigFilePath() string {
 	kubeConfigEnv := os.Getenv("KUBECONFIG")
 
@@ -27,6 +29,7 @@ func GetConfigFilePath() string {
 	return clientcmd.RecommendedHomeFile
 }
 
+// GetRawConfig is return kubeconfig struct, if have a multiple kubeconfig before merged later return struct
 func GetRawConfig() clientcmdapi.Config {
 	loadingRules := clientcmd.NewDefaultClientConfigLoadingRules()
 	config, err := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(loadingRules, &clientcmd.ConfigOverrides{}).RawConfig()
@@ -37,6 +40,7 @@ func GetRawConfig() clientcmdapi.Config {
 	return config
 }
 
+// SetNamespace is changed current namespace for current context, if have a multiple kubeconfig, searching context name in KUBECONFIG env later writing  to founded ConfigPath
 func SetNamespace(config clientcmdapi.Config, namespace string) error {
 
 	kubeConfigEnv := os.Getenv("KUBECONFIG")
@@ -59,6 +63,7 @@ func SetNamespace(config clientcmdapi.Config, namespace string) error {
 	return err
 }
 
+// GetContexts return context names in kubeconfig struct
 func GetContexts(config clientcmdapi.Config) []string {
 	contexts := []string{}
 	for key := range config.Contexts {
@@ -68,6 +73,7 @@ func GetContexts(config clientcmdapi.Config) []string {
 
 }
 
+// SetContext Change current context in first file if setting KUBECONFIG env,because kubectl look first file in KUBECONFIG env ,if not set env than looking home config
 func SetContext(contex string) {
 
 	kubeConfigEnv := os.Getenv("KUBECONFIG")
@@ -98,11 +104,12 @@ func SetContext(contex string) {
 
 }
 
-func GetPrevContextConfig() PrevContextConfig {
-	var config PrevContextConfig
-	configPath, ok := IsExistsPrevContext()
+// GetPrevConfig return PrevConfig struct, if PrevConfig not exists than create empty config
+func GetPrevConfig() PrevConfig {
+	var config PrevConfig
+	configPath, ok := IsExistsPrevConfig()
 	if !ok {
-		config = PrevContextConfig{PrevContext: "", PrevNamespace: ""}
+		config = PrevConfig{PrevContext: "", PrevNamespace: ""}
 		data, err := yaml.Marshal(&config)
 		if err != nil {
 			panic(err)
@@ -120,7 +127,8 @@ func GetPrevContextConfig() PrevContextConfig {
 	return config
 }
 
-func IsExistsPrevContext() (string, bool) {
+// IsExistsPrevConfig checker Prevconfig exists and return bool,configPath
+func IsExistsPrevConfig() (string, bool) {
 	dir, err := homedir.Dir()
 	if err != nil {
 		panic(err)
@@ -132,23 +140,27 @@ func IsExistsPrevContext() (string, bool) {
 	}
 	return configPath, true
 }
-func (config *PrevContextConfig) SetContextPrevContextConfig(context string) {
+
+// SetContextPrevConfig is change prev context and empty namespace
+func (config *PrevConfig) SetContextPrevConfig(context string) {
 	config.PrevContext = context
 	config.PrevNamespace = ""
 
 }
 
-func (config *PrevContextConfig) SetNamespacePrevContextConfig(namespace string) {
+// SetNamespacePrevConfig is changer prev namespace
+func (config *PrevConfig) SetNamespacePrevConfig(namespace string) {
 	config.PrevNamespace = namespace
 
 }
 
-func (config *PrevContextConfig) WriteFile() {
+// WriteFile is save current PrevConfig struct to file
+func (config *PrevConfig) WriteFile() {
 	data, err := yaml.Marshal(&config)
 	if err != nil {
 		panic(err)
 	}
-	configPath, ok := IsExistsPrevContext()
+	configPath, ok := IsExistsPrevConfig()
 
 	if ok {
 		err := ioutil.WriteFile(configPath, data, 0644)
