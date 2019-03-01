@@ -107,7 +107,7 @@ func SetContext(contex string) {
 // GetPrevConfig return PrevConfig struct, if PrevConfig not exists than create empty config
 func GetPrevConfig() PrevConfig {
 	var config PrevConfig
-	configPath, ok := IsExistsPrevConfig()
+	configFile, ok := IsExistsPrevConfig()
 	if !ok {
 		config = PrevConfig{PrevContext: "", PrevNamespace: ""}
 		data, err := yaml.Marshal(&config)
@@ -115,11 +115,17 @@ func GetPrevConfig() PrevConfig {
 			panic(err)
 		}
 
-		err = ioutil.WriteFile(configPath, data, 0644)
+		if err != nil {
+			panic(err)
+		}
+		err = ioutil.WriteFile(configFile, data, 0644)
+		if err != nil {
+			panic(err)
+		}
 		return config
 	}
 
-	reading, err := ioutil.ReadFile(configPath)
+	reading, err := ioutil.ReadFile(configFile)
 	if err != nil {
 		panic(err)
 	}
@@ -133,12 +139,18 @@ func IsExistsPrevConfig() (string, bool) {
 	if err != nil {
 		panic(err)
 	}
-	configPath := filepath.Join(dir, ".context-manager", "config")
+	configPath := filepath.Join(dir, ".context-manager")
+	configFile := filepath.Join(configPath, "config")
 	_, err = os.Stat(configPath)
 	if os.IsNotExist(err) {
-		return configPath, false
+		os.MkdirAll(configPath, os.ModePerm)
+		_, err := os.Create(configFile)
+		if err != nil {
+			panic(err)
+		}
+		return configFile, false
 	}
-	return configPath, true
+	return configFile, true
 }
 
 // SetContextPrevConfig is change prev context and empty namespace
@@ -160,10 +172,10 @@ func (config *PrevConfig) WriteFile() {
 	if err != nil {
 		panic(err)
 	}
-	configPath, ok := IsExistsPrevConfig()
+	configFile, ok := IsExistsPrevConfig()
 
 	if ok {
-		err := ioutil.WriteFile(configPath, data, 0644)
+		err := ioutil.WriteFile(configFile, data, 0644)
 		if err != nil {
 			panic(err)
 		}
