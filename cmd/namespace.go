@@ -42,9 +42,10 @@ var prevNamespaceCmd = &cobra.Command{
 		config := util.GetRawConfig()
 		if prevConfig.PrevNamespace != "" {
 			util.SetNamespace(config, prevConfig.PrevNamespace)
+			fmt.Printf("%s\n", prevConfig.PrevNamespace)
 			prevConfig.SetNamespacePrevConfig(config.Contexts[config.CurrentContext].Namespace)
 			prevConfig.WriteFile()
-			fmt.Printf("%s\n", prevConfig.PrevNamespace)
+
 		} else {
 			fmt.Printf("Not found previous namespace\n")
 		}
@@ -52,9 +53,20 @@ var prevNamespaceCmd = &cobra.Command{
 	Aliases: []string{".."},
 }
 
+var currentNamespaceCmd = &cobra.Command{
+	Use:   "current",
+	Short: "Print current-context's namespace",
+	Run: func(cmd *cobra.Command, args []string) {
+		_, namespace := util.GetCurrentContext()
+		fmt.Printf("%s\n", namespace)
+	},
+	Aliases: []string{"."},
+}
+
 func init() {
 	rootCmd.AddCommand(namespaceCmd)
 	namespaceCmd.AddCommand(prevNamespaceCmd)
+	namespaceCmd.AddCommand(currentNamespaceCmd)
 
 }
 

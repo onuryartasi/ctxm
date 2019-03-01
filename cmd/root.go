@@ -47,6 +47,36 @@ var rootCmd = &cobra.Command{
 	},
 }
 
+var currentCmd = &cobra.Command{
+	Use:   "current",
+	Short: "Get Current context and namespace",
+	Long:  `Current context and current namespace printer`,
+	Run: func(cmd *cobra.Command, args []string) {
+		context, _ := util.GetCurrentContext()
+		fmt.Printf("%s\n", context)
+	},
+	Aliases: []string{"."},
+}
+
+// previousCmd represents the previous command
+var previousContextCmd = &cobra.Command{
+	Use:   "previous",
+	Short: "Change context to previous context ",
+	Run: func(cmd *cobra.Command, args []string) {
+		prevConfig := util.GetPrevConfig()
+		config := util.GetRawConfig()
+		if prevConfig.PrevContext != "" {
+			util.SetContext(prevConfig.PrevContext)
+			fmt.Printf("%s\n", prevConfig.PrevContext)
+			prevConfig.SetContextPrevConfig(config.CurrentContext)
+			prevConfig.WriteFile()
+		} else {
+			fmt.Printf("Not found previous Context\n")
+		}
+	},
+	Aliases: []string{"prev", ".."},
+}
+
 func ChangeContext(args ...string) {
 	var selectedContext string
 	config := util.GetRawConfig()
@@ -79,10 +109,11 @@ func Execute() {
 }
 
 func init() {
-
 	cobra.OnInitialize(initConfig)
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.context-manager.yaml)")
 	rootCmd.Flags().BoolVarP(&current, "current", "c", false, "Get Current Context")
+	rootCmd.AddCommand(previousContextCmd)
+	rootCmd.AddCommand(currentCmd)
 }
 
 // initConfig reads in config file and ENV variables if set.
