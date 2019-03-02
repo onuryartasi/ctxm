@@ -7,6 +7,7 @@ GOGET=$(GOCMD) get
 BINARY_NAME=ctxm
 BINARY_UNIX=$(BINARY_NAME)_unix
 COVERAGE_NAME=coverage.out
+CONFIG_DIR=$(HOME)/.context-manager
 
 .PHONY: test
 
@@ -14,6 +15,7 @@ all:
 build: 
 		$(GOBUILD) -o $(BINARY_NAME) -v
 test: 
+		rm -rf $(CONFIG_DIR)
 		$(GOTEST) -v  -coverpkg ./... ./...  -coverprofile=$(COVERAGE_NAME)
 clean: 
 		$(GOCLEAN)

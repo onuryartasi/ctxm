@@ -115,9 +115,6 @@ func GetPrevConfig() PrevConfig {
 			panic(err)
 		}
 
-		if err != nil {
-			panic(err)
-		}
 		err = ioutil.WriteFile(configFile, data, 0644)
 		if err != nil {
 			panic(err)

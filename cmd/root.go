@@ -64,18 +64,23 @@ var previousContextCmd = &cobra.Command{
 	Use:   "previous",
 	Short: "Change context to previous context ",
 	Run: func(cmd *cobra.Command, args []string) {
-		prevConfig := util.GetPrevConfig()
-		config := util.GetRawConfig()
-		if prevConfig.PrevContext != "" {
-			util.SetContext(prevConfig.PrevContext)
-			fmt.Printf("%s\n", prevConfig.PrevContext)
-			prevConfig.SetContextPrevConfig(config.CurrentContext)
-			prevConfig.WriteFile()
-		} else {
-			fmt.Printf("Not found previous Context\n")
-		}
+		output := PreviousContext(args...)
+		fmt.Println(output)
 	},
 	Aliases: []string{"prev", ".."},
+}
+
+func PreviousContext(args ...string) string {
+	prevConfig := util.GetPrevConfig()
+	config := util.GetRawConfig()
+	if prevConfig.PrevContext != "" {
+		util.SetContext(prevConfig.PrevContext)
+		prevConfig.SetContextPrevConfig(config.CurrentContext)
+		prevConfig.WriteFile()
+		return fmt.Sprintf("%s", prevConfig.PrevContext)
+	} else {
+		return fmt.Sprintf("Not found previous Context")
+	}
 }
 
 // ChangeContext is changer current-context
