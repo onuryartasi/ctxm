@@ -14,8 +14,11 @@
 
 package main
 
-import "github.com/onuryartasi/context-manager/cmd"
+import (
+	"github.com/onuryartasi/context-manager/cmd"
+)
 
 func main() {
 	cmd.Execute()
+
 }

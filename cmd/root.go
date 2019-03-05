@@ -32,16 +32,12 @@ var current bool
 var rootCmd = &cobra.Command{
 	Use:   "ctxm",
 	Short: "Easy to use kubernetes contexts",
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
 	Run: func(cmd *cobra.Command, args []string) {
 		if current {
-			context, namespace := util.GetCurrentContext()
-			fmt.Printf("%s, %s\n", context, namespace)
+			context, _ := util.GetCurrentContext()
+			fmt.Printf("%s\n", context)
 		} else {
 			ChangeContext(args...)
-
 		}
 
 	},
@@ -114,6 +110,7 @@ func Execute() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+
 }
 
 func init() {
