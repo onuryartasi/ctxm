@@ -73,15 +73,16 @@ func TestPreviousContext(t *testing.T) {
 			if output != "Not found previous Context" {
 				t.Errorf(output)
 			}
-			util.SetContext(context)
 			continue
 		}
-		prevContext := config.CurrentContext
-		util.SetContext(context)
-		output := cmd.PreviousContext()
-		if prevContext != output {
-			t.Errorf("Expected %s\nActual %s", prevContext, output)
+		prevConfig := util.GetPrevConfig()
+		prevConfig.SetContextPrevConfig(context)
+		prevConfig.WriteFile()
+		prevContext := cmd.PreviousContext()
+		if prevContext != context {
+			t.Errorf("Expected %s\nActual %s\n", context, prevContext)
 		}
+
 	}
 
 }

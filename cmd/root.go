@@ -74,10 +74,11 @@ func PreviousContext(args ...string) string {
 	prevConfig := util.GetPrevConfig()
 	config := util.GetRawConfig()
 	if prevConfig.PrevContext != "" {
+		prevContext := prevConfig.PrevContext
 		util.SetContext(prevConfig.PrevContext)
 		prevConfig.SetContextPrevConfig(config.CurrentContext)
 		prevConfig.WriteFile()
-		return fmt.Sprintf("%s", prevConfig.PrevContext)
+		return fmt.Sprintf("%s", prevContext)
 	} else {
 		return fmt.Sprintf("Not found previous Context")
 	}
