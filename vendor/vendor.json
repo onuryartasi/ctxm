@@ -344,6 +344,18 @@
 			"revisionTime": "2018-03-20T13:32:07Z"
 		},
 		{
+			"checksumSHA1": "5PMNg8nVuGqMPl88Bn71ebYbMJw=",
+			"path": "github.com/onuryartasi/context-manager/cmd",
+			"revision": "76c03aaa533bc65e15fc0998dbfdad4e10ebfe0a",
+			"revisionTime": "2019-03-05T20:16:44Z"
+		},
+		{
+			"checksumSHA1": "IUl7nwdWLwRZ8bea5eivl+Yxr7g=",
+			"path": "github.com/onuryartasi/context-manager/util",
+			"revision": "76c03aaa533bc65e15fc0998dbfdad4e10ebfe0a",
+			"revisionTime": "2019-03-05T20:16:44Z"
+		},
+		{
 			"checksumSHA1": "NzzMfGmmPoTGVwLZDkj3FXXDvCA=",
 			"path": "github.com/pelletier/go-toml",
 			"revision": "27c6b39a135b7dc87a14afb068809132fb7a9a8f",
@@ -1324,5 +1336,5 @@
 			"revisionTime": "2018-10-04T12:42:42Z"
 		}
 	],
-	"rootPath": "github.com/onuryartasi/context-manager"
+	"rootPath": "github.com/onuryartasi/ctxm"
 }

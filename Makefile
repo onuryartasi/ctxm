@@ -16,7 +16,7 @@ build:
 		$(GOBUILD) -o $(BINARY_NAME) -v
 test: 
 		rm -rf $(CONFIG_DIR)
-		$(GOTEST) -v  -coverpkg ./... ./...  -coverprofile=$(COVERAGE_NAME)
+		$(GOTEST) -v  -coverpkg ./... ./... -coverprofile=$(COVERAGE_NAME)
 clean: 
 		$(GOCLEAN)
 		rm -f $(BINARY_NAME)
