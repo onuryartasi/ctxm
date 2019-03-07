@@ -8,7 +8,7 @@ Kubernets contexts easier to use with context-manager
 
 ![Change Context](https://github.com/onuryartasi/ctxm/blob/master/img/context.svg)
 
-![Change Namespace](./img/namespace.svg)
+![Change Namespace](https://raw.githubusercontent.com/onuryartasi/ctxm/master/img/namespace.svg)
 
 ### Installing
 
