@@ -20,7 +20,7 @@ if you're using golang:
 go get -u github.com/onuryartasi/ctxm
 ```
 
-or you use binary 
+or you can use binary 
 
 ```
 wget https://github.com/onuryartasi/ctxm/releases/download/v1.0.1/ctxm
