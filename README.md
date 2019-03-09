@@ -26,7 +26,12 @@ or you can use binary
 wget https://github.com/onuryartasi/ctxm/releases/download/v1.0.1/ctxm
 ```
 
+## TODO LIST
+- [ ] Adding pod log 
+- [ ] Adding pod exec
+- [ ] Adding add,remove,rename context
+
 
 ## License
 
-This project is licensed under the Apache 2.0 License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details
